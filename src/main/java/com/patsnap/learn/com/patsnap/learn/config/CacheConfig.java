@@ -39,7 +39,7 @@ public class CacheConfig {
     }
 
     public enum Caches {
-        FIND_PERSON(60);
+        FIND_PERSON(1800);
 
         private int maxSize = DEFAULT_MAXSIZE; //最大數量
         private int ttl = DEFAULT_TTL; //过期时间（秒）

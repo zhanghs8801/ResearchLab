@@ -23,7 +23,7 @@ public class PersonResource {
     @Autowired
     private CacheManager cacheManager;
 
-    @GetMapping("/findPerson/{id}")
+    @GetMapping("/find_person/{id}")
     public Person findPerson(@PathVariable("id") Integer id) {
         LOG.info("receive a find person request");
         long start = System.currentTimeMillis();
@@ -32,11 +32,11 @@ public class PersonResource {
         return person;
     }
 
-    @GetMapping("/stats")
-    public void stats() {
-        Collection<String> cacheNames = cacheManager.getCacheNames();
-        for (String cacheName : cacheNames) {
-            GuavaCache guavaCache = (GuavaCache) cacheManager.getCache(cacheName);
+    @GetMapping("/clean_cache")
+    public String cleanCache() {
+        if (personService.cleanCache()){
+            return "clean cache successfully";
         }
+        return "clean cache failure";
     }
 }

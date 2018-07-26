@@ -3,6 +3,7 @@ package com.patsnap.learn.com.patsnap.learn.service;
 import com.patsnap.learn.com.patsnap.learn.bean.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,9 @@ public class PersonService {
     private Map<Integer, Person> personDao = new HashMap<>();
 
     {
-        personDao.put(1, new Person(1, "后羿", "火星"));
-        personDao.put(2, new Person(2, "嫦娥", "月球"));
-        personDao.put(3, new Person(3, "老夫之", "金星"));
-        personDao.put(4, new Person(4, "周瑜", "水星"));
-        personDao.put(5, new Person(5, "花木兰", "土星"));
+        personDao.put(1, new Person(1, "周瑜看小桥流水", "火星"));
+        personDao.put(2, new Person(2, "嫦娥遇后羿射日", "月球"));
+        personDao.put(3, new Person(3, "元帝惜昭君出塞", "金星"));
     }
 
     /**
@@ -37,5 +36,11 @@ public class PersonService {
         }
         LOG.info("fetch person with id {}", id);
         return personDao.get(id);
+    }
+
+    @CacheEvict(value = "FIND_PERSON", allEntries = true)
+    public boolean cleanCache(){
+        LOG.info("Evict all caches");
+        return true;
     }
 }
