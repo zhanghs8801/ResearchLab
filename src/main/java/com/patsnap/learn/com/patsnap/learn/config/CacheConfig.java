@@ -3,6 +3,9 @@ package com.patsnap.learn.com.patsnap.learn.config;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.guava.GuavaCache;
@@ -16,6 +19,9 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @EnableCaching
 public class CacheConfig {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CacheConfig.class);
+
     private static final int DEFAULT_MAXSIZE = 1000;
 
     private static final int DEFAULT_TTL = 300;
@@ -30,7 +36,7 @@ public class CacheConfig {
             caches.add(new GuavaCache(c.name(), CacheBuilder.newBuilder().recordStats().expireAfterWrite(c.getTtl(), TimeUnit.SECONDS).maximumSize(c.getMaxSize()).removalListener(new RemovalListener<Object, Object>() {
                 @Override
                 public void onRemoval(RemovalNotification<Object, Object> notification) {
-                    System.out.println("key: "+notification.getKey()+", value: "+notification.getValue()+" has removed, cause: "+notification.getCause());
+                    LOG.info("key: {}=>value: {} has expired, the cause is {}", notification.getKey(), notification.getValue(), notification.getCause());
                 }
             }).build()));
         }
@@ -39,7 +45,7 @@ public class CacheConfig {
     }
 
     public enum Caches {
-        FIND_PERSON(1800);
+        FIND_PERSON(20);
 
         private int maxSize = DEFAULT_MAXSIZE; //最大數量
         private int ttl = DEFAULT_TTL; //过期时间（秒）

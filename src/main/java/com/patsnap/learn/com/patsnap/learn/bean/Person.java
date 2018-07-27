@@ -5,11 +5,11 @@ public class Person {
     private String name;
     private String address;
 
-    public Person(Integer id){
+    public Person(Integer id) {
         this.id = id;
     }
 
-    public Person(Integer id, String name, String address){
+    public Person(Integer id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -37,5 +37,10 @@ public class Person {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "id:" + id + ", name:" + name + ", address:" + address;
     }
 }
